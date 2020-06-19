@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Serverless Contact Form Example</title>        
+</head>
+<body>
+	<form id="contact-form">
+		<label>Email Address:</label><br>
+		<input type="text" name="emailAddress" class="model-email-address"><br>
+		<label>Subject:</label><br>
+		<input type="text" name="subject" class="model-email-subject"><br>
+		<label>Message:</label><br>
+		<textarea name="message" rows="10" cols="30" class="model-email-message"></textarea><br>
+		<input type="submit" value="Send">
+	</form>
+	
+	<script type="text/javascript">
+		document.getElementById('contact-form').addEventListener('submit', makeApiCall);
+		
+		function makeApiCall(e) {
+			e.preventDefault();
+			var email = document.querySelector('.model-email-address').value;
+			var subject = document.querySelector('.model-email-subject').value;
+			var message = document.querySelector('.model-email-message').value;
+			var endpoint = 'https://f2qd2sbryg.execute-api.us-west-2.amazonaws.com/prod/contact-form-logic';
+			
+			var body = {
+				email: email,
+				subject: subject,
+				message: message
+			};
+			
+			var endpointRequest = new Request(endpoint, {
+				method: 'POST',
+				body: JSON.stringify(body)
+			});
+			
+			fetch(endpointRequest)
+				.then(response => console.log(response.status))
+				.catch(err => console.log(err));
+		}
+    </script>
+</body>
+</html>
